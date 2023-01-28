@@ -1,5 +1,4 @@
 import gzip
-import os.path
 import xml.dom.minidom
 from pathlib import Path
 
@@ -9,6 +8,7 @@ from rich import print
 
 from blendals.live_set_parser import parse_als_file_content
 from blendals.utils.xml import save_xml_to_file
+from blendals.live_set_to_song import live_set_to_song
 
 app = typer.Typer()
 
@@ -35,6 +35,9 @@ def parse(
     # if track._element is not None:
     #     save_xml_to_file(track._element, "track.xml")
     # print(track)
+
+    song = live_set_to_song(live_set)
+    print(song)
 
 
 @app.command()
