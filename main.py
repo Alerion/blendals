@@ -2,6 +2,7 @@ import gzip
 import xml.dom.minidom
 from pathlib import Path
 
+import orjson
 import typer
 from lxml import etree
 from rich import print
@@ -38,6 +39,9 @@ def parse(
 
     song = live_set_to_song(live_set)
     print(song)
+    with open("song.json", "w") as f:
+        json = orjson.dumps(song, option=orjson.OPT_INDENT_2)
+        f.write(json.decode("utf-8"))
 
 
 @app.command()
