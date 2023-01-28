@@ -1,7 +1,14 @@
 from lxml.etree import _Element as Element
 
-from blendals.live_set import (KeyTrack, LiveSet, Loop, MidiClip, MidiNote, MidiTrack,
-                               TimeSignature)
+from blendals.live_set import (
+    KeyTrack,
+    LiveSet,
+    Loop,
+    MidiClip,
+    MidiNote,
+    MidiTrack,
+    TimeSignature,
+)
 
 
 def parse_als_file_content(element: Element) -> LiveSet:
@@ -25,6 +32,9 @@ def get_midi_tracks(live_set_element: Element) -> list[MidiTrack]:
     output = []
     for midi_track_element in live_set_element.xpath("./Tracks/MidiTrack"):
         name = midi_track_element.xpath("./Name/UserName")[0].get("Value")
+        # You can add # to the name in Ableton and track number is inserter there.
+        if name.startswith("#"):
+            name = name[1:].strip()
         midi_track = MidiTrack(
             name=name,
             midi_clips=get_midi_clips(midi_track_element),
