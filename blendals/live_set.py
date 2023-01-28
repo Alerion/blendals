@@ -8,6 +8,7 @@ from lxml.etree import _Element as Element
 class LiveSet:
     tempo: int
     tracks: list["MidiTrack"]
+    _element: Optional[Element] = field(default=None, repr=False)
 
 
 @dataclass
