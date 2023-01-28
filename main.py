@@ -32,6 +32,7 @@ def parse(
     live_set_xml = etree.fromstring(content)
     live_set = parse_als_file_content(live_set_xml)
 
+    save_xml_to_file(live_set._element, "live_set.xml")
     # track = live_set.tracks[2]
     # if track._element is not None:
     #     save_xml_to_file(track._element, "track.xml")

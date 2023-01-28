@@ -17,6 +17,7 @@ def parse_als_file_content(element: Element) -> LiveSet:
     live_set = LiveSet(
         tempo=get_tempo(live_set_element),
         tracks=get_midi_tracks(live_set_element),
+        _element=live_set_element,
     )
 
     return live_set

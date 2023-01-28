@@ -4,7 +4,10 @@ from blendals import live_set
 
 
 def live_set_to_song(liveset: live_set.LiveSet) -> "Song":
-    song = Song(tracks=[])
+    song = Song(
+        tempo=liveset.tempo,
+        tracks=[]
+    )
 
     for midi_track in liveset.tracks:
         # Generate notes for each midi key from all midi clips.
@@ -97,6 +100,7 @@ def get_notes_from_key_track(
 
 @dataclass
 class Song:
+    tempo: int
     tracks: list["Track"]
 
 
