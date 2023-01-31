@@ -22,6 +22,8 @@ python -m main parse <path to .als file>
 
 ## Install dependencies
 
+FIXME: It is a dangerous way, because we can overwrite Blender's dependencies. 
+
 Install `poetry`:
 ```
 <path to blender>/Blender/3.4/python/bin/python.exe -m pip install poetry
