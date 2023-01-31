@@ -16,7 +16,6 @@ def create_controls_collection(name: str = settings.LIVE_SET_CONTROLS_COLLECTION
 
 def create_control_object(name: str) -> Object:
     empty_obj = bpy.data.objects.new(name=name, object_data=None)
-    empty_obj.empty_display_type = EmptyDrawType.ARROWS
+    empty_obj.empty_display_type = EmptyDrawType.PLAIN_AXES
     empty_obj.empty_display_size = 1
-    empty_obj.location = (5.0, 5.0, 5.0)
     return empty_obj

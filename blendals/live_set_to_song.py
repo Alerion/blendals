@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 
 from blendals import live_set
 
@@ -101,13 +102,14 @@ def get_notes_from_key_track(
 @dataclass
 class Song:
     tempo: int
-    tracks: list["Track"]
+    # Dacite does not work with build in list that is supported from 3.9. So use List instead of list.
+    tracks: List["Track"]
 
 
 @dataclass
 class Track:
     id: str
-    notes: list["Note"]
+    notes: List["Note"]
 
 
 @dataclass
