@@ -11,6 +11,9 @@ def create_controls_collection(name: str = settings.LIVE_SET_CONTROLS_COLLECTION
     if collection is None:
         collection = bpy.data.collections.new(name)
         bpy.context.scene.collection.children.link(collection)
+    else:
+        for obj in collection.objects:
+            bpy.data.objects.remove(obj)
     return collection
 
 

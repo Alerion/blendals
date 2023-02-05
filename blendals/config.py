@@ -14,6 +14,7 @@ class Settings:
     LIVE_SET_CONTROLS_COLLECTION: str = "LiveSetControls"
     CONTROLS_POSITION: Location = (10, 10, 0)
     # TODO: Get from project data
+    START_FRAME: int = 1
     FRAME_RATE_FPS: int = 24
 
 

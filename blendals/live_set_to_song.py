@@ -105,6 +105,12 @@ class Song:
     # Dacite does not work with build in list that is supported from 3.9. So use List instead of list.
     tracks: List["Track"]
 
+    def get_track(self, track_id: str) -> 'Track':
+        for track in self.tracks:
+            if track.id == track_id:
+                return track
+            raise KeyError
+
 
 @dataclass
 class Track:

@@ -1,10 +1,18 @@
 import bpy
 from bpy_types import Collection, Object
 
-from blendals.load_song_from_file import load_song_from_file
+from blendals.blender.audio import add_audio_to_sequence_editor
 from blendals.blender.create_controls_collection import create_controls_collection, create_control_object
-from blendals.live_set_to_song import Song, Track
 from blendals.config import settings
+from blendals.live_set_to_song import Song, Track
+from blendals.load_song_from_file import load_song_from_file
+from blendals.blender.controls_animation_generator import ScaleControlAnimationGenerator
+
+
+TRACK_ANIMATION_GENERATORS = {
+    "Kick:36": ScaleControlAnimationGenerator("Kick:36"),
+    # "HH:38": ScaleControlAnimationGenerator("Kick:36", max_scale=3),
+}
 
 
 def main() -> None:
@@ -16,6 +24,10 @@ def main() -> None:
 
 def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
     for i, track in enumerate(song.tracks):
+        animation_generator = TRACK_ANIMATION_GENERATORS.get(track.id)
+        if animation_generator is None:
+            continue
+
         control = bpy.context.scene.objects.get(track.id)
         if control is not None:
             continue
@@ -28,24 +40,4 @@ def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
         )
         controls_collection.objects.link(control)
 
-
-def add_audio_to_sequence_editor(channel: int = 1, frame_start: int = 1) -> None:
-    scene = bpy.context.scene
-
-    # Create sequences editor
-    if not scene.sequence_editor:
-        scene.sequence_editor_create()
-
-    # Remove existing sequence
-    existing_sequence = None
-    for sequence in scene.sequence_editor.sequences.values():
-        if sequence.channel == channel:
-            existing_sequence = sequence
-            break
-
-    if existing_sequence is not None:
-        scene.sequence_editor.sequences.remove(existing_sequence)
-
-    # Add audio file as a sequence
-    # TODO: Get frame_start from animation properties
-    scene.sequence_editor.sequences.new_sound("Audio track", settings.AUDIO_FILE_PATH, channel, frame_start)
+        animation_generator.generate(control, song)
