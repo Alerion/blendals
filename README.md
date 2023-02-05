@@ -44,15 +44,22 @@ Add this script in Blender:
 ```python
 import sys
 
-PROJECT_ROOT = "<path to project root>"
+PROJECT_ROOT = "<Path to project>"
 
 if PROJECT_ROOT not in sys.path:
    sys.path.append(PROJECT_ROOT)
 
 import blendals.blender.main
-import importlib
-importlib.reload(blendals.blender.main)    
 
+import importlib
+
+modules_to_reload = []
+for name, module in sys.modules.items():
+    if name.startswith("blendals"):
+        modules_to_reload.append(module)
+
+for module in modules_to_reload:
+    importlib.reload(module)
 
 if __name__ == "__main__":
     blendals.blender.main.main()
