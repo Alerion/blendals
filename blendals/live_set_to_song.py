@@ -109,7 +109,7 @@ class Song:
         for track in self.tracks:
             if track.id == track_id:
                 return track
-            raise KeyError
+        raise KeyError(track_id)
 
 
 @dataclass

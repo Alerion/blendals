@@ -10,12 +10,13 @@ from blendals.config import settings
 class ScaleControlAnimationGenerator:
     # TODO: Scale with velocity
 
-    def __init__(self, track_id: str, min_scale: float = 1, max_scale: float = 2):
+    def __init__(self, track_id: str, min_scale: float = 1, max_scale: float = 2, note_attack: float = 0.25, note_release: float = 1):
         self.track_id = track_id
         self.min_scale = min_scale
         self.max_scale = max_scale
         # From 0 to 1 value. When animation reach max value withing a note length.
-        self.note_attack = 0.25
+        self.note_attack = note_attack
+        self.note_release = note_release
 
         self.interpolation = KeyframeTransition.LINEAR
         self.handle_frame_distance = 1
@@ -39,7 +40,9 @@ class ScaleControlAnimationGenerator:
     def _add_note_to_animation_curve(self, animation_curve: FCurve, note: Note) -> None:
         start_frame = self._frame_calculator.beat_to_frame(note.start)
         end_frame = self._frame_calculator.beat_to_frame(note.end)
+
         peak_frame = start_frame + (end_frame - start_frame) * self.note_attack
+        end_frame = start_frame + (end_frame - start_frame) * self.note_release
 
         self._set_keyframe_point(animation_curve, frame=start_frame, value=self.min_scale)
         self._set_keyframe_point(animation_curve, frame=peak_frame, value=self.max_scale)

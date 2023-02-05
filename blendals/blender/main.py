@@ -10,8 +10,8 @@ from blendals.blender.controls_animation_generator import ScaleControlAnimationG
 
 
 TRACK_ANIMATION_GENERATORS = {
-    "Kick:36": ScaleControlAnimationGenerator("Kick:36"),
-    # "HH:38": ScaleControlAnimationGenerator("Kick:36", max_scale=3),
+    "Kick:36": ScaleControlAnimationGenerator("Kick:36", max_scale=3),
+    "Percs:36": ScaleControlAnimationGenerator("Percs:36", min_scale=0, max_scale=1, note_release=2),
 }
 
 
@@ -34,7 +34,7 @@ def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
 
         control = create_control_object(track.id)
         control.location = (
-            settings.CONTROLS_POSITION[0] + i,
+            settings.CONTROLS_POSITION[0],
             settings.CONTROLS_POSITION[1],
             settings.CONTROLS_POSITION[2],
         )
