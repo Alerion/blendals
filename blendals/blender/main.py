@@ -10,8 +10,8 @@ from blendals.blender.controls_animation_generator import ScaleControlAnimationG
 
 
 TRACK_ANIMATION_GENERATORS = {
-    "Kick:36": ScaleControlAnimationGenerator("Kick:36", max_scale=3),
-    "Percs:36": ScaleControlAnimationGenerator("Percs:36", min_scale=0, max_scale=1, note_release=2),
+    "Kick:36": ScaleControlAnimationGenerator(max_scale=3),
+    "Percs:36": ScaleControlAnimationGenerator(min_scale=0, max_scale=1, note_release=2),
 }
 
 
@@ -29,15 +29,14 @@ def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
             continue
 
         control = bpy.context.scene.objects.get(track.id)
-        if control is not None:
-            continue
+        if control is None:
+            control = create_control_object(track.id)
+            control.location = (
+                settings.CONTROLS_POSITION[0],
+                settings.CONTROLS_POSITION[1],
+                settings.CONTROLS_POSITION[2],
+            )
+            controls_collection.objects.link(control)
 
-        control = create_control_object(track.id)
-        control.location = (
-            settings.CONTROLS_POSITION[0],
-            settings.CONTROLS_POSITION[1],
-            settings.CONTROLS_POSITION[2],
-        )
-        controls_collection.objects.link(control)
-
-        animation_generator.generate(control, song)
+        animation_generator.init(track, song)
+        animation_generator.generate(control)

@@ -1,6 +1,7 @@
 import bpy
 from bpy.types import Keyframe, FCurveKeyframePoints, FCurve
 from bpy_types import Object
+from rich import print
 
 from blendals.live_set_to_song import Track, Song, Note
 from blendals.blender.enums import KeyframeTransition, KeyframeHandleType
@@ -10,8 +11,7 @@ from blendals.config import settings
 class ScaleControlAnimationGenerator:
     # TODO: Scale with velocity
 
-    def __init__(self, track_id: str, min_scale: float = 1, max_scale: float = 2, note_attack: float = 0.25, note_release: float = 1):
-        self.track_id = track_id
+    def __init__(self, *, min_scale: float = 1, max_scale: float = 2, note_attack: float = 0.25, note_release: float = 1):
         self.min_scale = min_scale
         self.max_scale = max_scale
         # From 0 to 1 value. When animation reach max value withing a note length.
@@ -22,19 +22,22 @@ class ScaleControlAnimationGenerator:
         self.handle_frame_distance = 1
 
         self._frame_calculator: FrameCalculator
+        self._track: Track
 
-    def generate(self, control: Object, song: Song) -> None:
-        # TODO: Find a better place to init this
+    def init(self, track: Track, song: Song) -> None:
+        print(f"Init {self.__class__.__name__} for {track.id}")
         self._frame_calculator = FrameCalculator(song.tempo)
+        self._track = track
 
-        track = song.get_track(self.track_id)
+    def generate(self, control: Object) -> None:
+        print(f"Generate {self.__class__.__name__} animation for {self._track.id}")
         control.animation_data_clear()
         control.animation_data_create()
-        control.animation_data.action = bpy.data.actions.new(name=f"{self.track_id} Scale Animation")
+        control.animation_data.action = bpy.data.actions.new(name=f"{self._track.id} Scale Animation")
         # Generate animation for all three scale dimensions
         for scale_index in range(3):
             animation_curve = control.animation_data.action.fcurves.new(data_path="scale", index=scale_index)
-            for note in track.notes:
+            for note in self._track.notes:
                 self._add_note_to_animation_curve(animation_curve, note)
 
     def _add_note_to_animation_curve(self, animation_curve: FCurve, note: Note) -> None:
