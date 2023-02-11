@@ -6,7 +6,9 @@ from blendals.blender.enums import EmptyDrawType
 from rich import print
 
 
-def create_controls_collection(name: str = settings.LIVE_SET_CONTROLS_COLLECTION) -> Collection:
+def create_controls_collection(
+    name: str = settings.LIVE_SET_CONTROLS_COLLECTION,
+) -> Collection:
     collection = bpy.context.scene.collection.children.get(name)
     if collection is None:
         collection = bpy.data.collections.new(name)
