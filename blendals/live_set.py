@@ -6,9 +6,36 @@ from lxml.etree import _Element as Element
 
 @dataclass
 class LiveSet:
-    tempo: int
-    tracks: list["MidiTrack"]
+    bpm: int
+    midi_tracks: list["MidiTrack"]
+    audio_tracks: list["AudioTrack"]
     _element: Optional[Element] = field(default=None, repr=False)
+
+
+@dataclass
+class AudioTrack:
+    name: str
+    audio_clips: list["AudioClip"]
+    _element: Optional[Element] = field(default=None, repr=False)
+
+
+@dataclass
+class AudioClip:
+    id: str
+    name: str
+    start: float
+    end: float
+    loop: "Loop"
+    time_signature: "TimeSignature"
+    left_channel_points: list["AudioChannelPoint"]
+    right_channel_points: list["AudioChannelPoint"]
+    _element: Optional[Element] = field(default=None, repr=False)
+
+
+@dataclass
+class AudioChannelPoint:
+    time: float
+    value: float
 
 
 @dataclass

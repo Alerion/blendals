@@ -4,12 +4,11 @@ from pathlib import Path
 
 import orjson
 import typer
-from lxml import etree
-from rich import print
 
-from blendals.live_set_parser import parse_als_file_content
+from blendals.live_set_parser import LiveSetParser
 from blendals.utils.xml import save_xml_to_file
 from blendals.live_set_to_song import live_set_to_song
+from blendals.config import settings
 
 app = typer.Typer()
 
@@ -26,11 +25,8 @@ def parse(
         resolve_path=True,
     )
 ):
-    content = gzip.decompress(als_file.read_bytes())
-    content = content.replace(b"\t", b"")
-    content = content.replace(b"\n", b"")
-    live_set_xml = etree.fromstring(content)
-    live_set = parse_als_file_content(live_set_xml)
+    live_set_parser = LiveSetParser(als_file)
+    live_set = live_set_parser.get_live_set()
 
     save_xml_to_file(live_set._element, "live_set.xml")
     # track = live_set.tracks[2]
@@ -39,8 +35,7 @@ def parse(
     # print(track)
 
     song = live_set_to_song(live_set)
-    print(song)
-    with open("song.json", "w") as f:
+    with open(settings.SONG_FILE_PATH, "w") as f:
         json = orjson.dumps(song, option=orjson.OPT_INDENT_2)
         f.write(json.decode("utf-8"))
 

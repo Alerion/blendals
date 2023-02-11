@@ -24,6 +24,7 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.ipynb_checkpoints
 
 # Installer logs
 pip-log.txt
@@ -32,3 +33,4 @@ pip-delete-this-directory.txt
 # Custom
 /.idea/
 /venv/
+/song.json

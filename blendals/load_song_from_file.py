@@ -12,5 +12,5 @@ def load_song_from_file() -> Song:
     return song
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_song_from_file()
