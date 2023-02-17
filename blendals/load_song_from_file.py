@@ -1,7 +1,7 @@
 import orjson
 import dacite
 
-from blendals.live_set_to_song import Song
+from blendals.song import Song
 from blendals.config import settings
 
 

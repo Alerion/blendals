@@ -4,18 +4,15 @@ The basic idea is to parse the Ableton Live project file(.als)
 and create a .json file with a track structure. Then you can use data from
 this file to create a track visualization.
 
+Use [blendals_parser](https://github.com/Alerion/blendals_parser) to get `song.json` file
+from Ableton Live project file.
+
 # Installation
 
 ```
 python3.9 -m venv venv
 . venv/bin/activate
 poetry install
-```
-
-# Usage
-
-```
-python -m main parse <path to .als file>
 ```
 
 # Running code in Blender

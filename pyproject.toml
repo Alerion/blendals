@@ -7,13 +7,9 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
-typer = "^0.7.0"
 rich = "^13.2.0"
-lxml = "^4.9.2"
-orjson = "^3.8.5"
 dacite = "^1.8.0"
-soundfile = "^0.11.0"
-numpy = "^1.24.2"
+orjson = "^3.8.6"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"
