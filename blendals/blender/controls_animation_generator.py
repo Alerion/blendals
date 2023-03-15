@@ -3,7 +3,7 @@ from bpy.types import Keyframe, FCurveKeyframePoints, FCurve
 from bpy_types import Object
 from rich import print
 
-from blendals.song import AudioTrack, Song, Note
+from blendals.song import MidiTrack, Song, Note
 from blendals.blender.enums import KeyframeTransition, KeyframeHandleType
 from blendals.config import settings
 
@@ -29,11 +29,11 @@ class ScaleControlAnimationGenerator:
         self.handle_frame_distance = 1
 
         self._frame_calculator: FrameCalculator
-        self._track: AudioTrack
+        self._track: MidiTrack
 
-    def init(self, track: AudioTrack, song: Song) -> None:
+    def init(self, track: MidiTrack, song: Song) -> None:
         print(f"Init {self.__class__.__name__} for {track.id}")
-        self._frame_calculator = FrameCalculator(song.tempo)
+        self._frame_calculator = FrameCalculator(song.bpm)
         self._track = track
 
     def generate(self, control: Object) -> None:

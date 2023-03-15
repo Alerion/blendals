@@ -58,6 +58,9 @@ for name, module in sys.modules.items():
 for module in modules_to_reload:
     importlib.reload(module)
 
+for module in modules_to_reload:
+    importlib.reload(module)
+
 if __name__ == "__main__":
     blendals.blender.main.main()
 ```

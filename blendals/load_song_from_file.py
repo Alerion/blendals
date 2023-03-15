@@ -1,7 +1,7 @@
 import orjson
 import dacite
 
-from blendals.song import Song
+from blendals.song import Song, MidiTrack
 from blendals.config import settings
 
 

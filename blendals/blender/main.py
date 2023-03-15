@@ -7,7 +7,7 @@ from blendals.blender.create_controls_collection import (
     create_control_object,
 )
 from blendals.config import settings
-from blendals.live_set_to_song import Song, Track
+from blendals.song import Song, MidiTrack
 from blendals.load_song_from_file import load_song_from_file
 from blendals.blender.controls_animation_generator import ScaleControlAnimationGenerator
 
