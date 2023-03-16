@@ -31,7 +31,10 @@ def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
     for i, track in enumerate(song.midi_tracks):
         animation_generator = TRACK_ANIMATION_GENERATORS.get(track.id)
         if animation_generator is None:
+            print(f"Animation generator is not found for track {track.id}")
             continue
+
+        print("Animation generator is found for track {track.id}")
 
         control = bpy.context.scene.objects.get(track.id)
         if control is None:

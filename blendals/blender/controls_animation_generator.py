@@ -5,7 +5,7 @@ from rich import print
 
 from blendals.song import MidiTrack, Song, Note
 from blendals.blender.enums import KeyframeTransition, KeyframeHandleType
-from blendals.config import settings
+from blendals.frame_calculator import frame_calculator
 
 
 class ScaleControlAnimationGenerator:
@@ -27,13 +27,10 @@ class ScaleControlAnimationGenerator:
 
         self.interpolation = KeyframeTransition.LINEAR
         self.handle_frame_distance = 1
-
-        self._frame_calculator: FrameCalculator
         self._track: MidiTrack
 
     def init(self, track: MidiTrack, song: Song) -> None:
         print(f"Init {self.__class__.__name__} for {track.id}")
-        self._frame_calculator = FrameCalculator(song.bpm)
         self._track = track
 
     def generate(self, control: Object) -> None:
@@ -52,8 +49,8 @@ class ScaleControlAnimationGenerator:
                 self._add_note_to_animation_curve(animation_curve, note)
 
     def _add_note_to_animation_curve(self, animation_curve: FCurve, note: Note) -> None:
-        start_frame = self._frame_calculator.beat_to_frame(note.start)
-        end_frame = self._frame_calculator.beat_to_frame(note.end)
+        start_frame = frame_calculator.beat_to_frame(note.start)
+        end_frame = frame_calculator.beat_to_frame(note.end)
 
         peak_frame = start_frame + (end_frame - start_frame) * self.note_attack
         end_frame = start_frame + (end_frame - start_frame) * self.note_release
@@ -78,19 +75,3 @@ class ScaleControlAnimationGenerator:
             keyframe_point.handle_left = (frame - self.handle_frame_distance, value)
             keyframe_point.handle_right_type = KeyframeHandleType.AUTO
             keyframe_point.handle_right = (frame + self.handle_frame_distance, value)
-
-
-class FrameCalculator:
-    def __init__(
-        self,
-        song_tempo: int,
-        frame_rate: int = settings.FRAME_RATE_FPS,
-        start_frame: int = settings.START_FRAME,
-    ):
-        self.song_tempo = song_tempo
-        self.beats_per_seconds = song_tempo / 60
-        self.frame_rate = frame_rate
-        self.start_frame = start_frame
-
-    def beat_to_frame(self, beat: float) -> float:
-        return self.start_frame + beat * self.frame_rate / self.beats_per_seconds

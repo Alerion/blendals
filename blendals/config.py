@@ -14,8 +14,12 @@ class Settings:
     LIVE_SET_CONTROLS_COLLECTION: str = "LiveSetControls"
     CONTROLS_POSITION: Location = (0, 0, 0)
     # TODO: Get from project data
-    START_FRAME: int = 1
+    FIRST_VIDEO_FRAME: int = 1
     FRAME_RATE_FPS: int = 24
+    # The first bar is 1
+    SONG_TEMPO: int = 120
+    SONG_BAR_SIZE_BEATS: int = 4
+    SONG_START_BAR: float = 5
 
 
 settings = Settings()
