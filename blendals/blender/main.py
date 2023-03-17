@@ -9,14 +9,15 @@ from blendals.blender.create_controls_collection import (
 from blendals.config import settings
 from blendals.song import Song, MidiTrack
 from blendals.load_song_from_file import load_song_from_file
-from blendals.blender.controls_animation_generator import ScaleControlAnimationGenerator
+from blendals.blender.animations import ScaleAnimation
+from blendals.blender.curve_generators import MidiTrackToCurve, AudioTrackToCurve
 
 
 TRACK_ANIMATION_GENERATORS = {
-    "Kick:36": ScaleControlAnimationGenerator(max_scale=3),
-    "Percs:36": ScaleControlAnimationGenerator(
-        min_scale=0, max_scale=1, note_release=2
-    ),
+    "Kick:36": ScaleAnimation(MidiTrackToCurve(max_value=3)),
+    "Percs:36": ScaleAnimation(MidiTrackToCurve(min_value=0, max_value=1, note_release=2)),
+    "Pads:left_channel": ScaleAnimation(AudioTrackToCurve(max_value=3)),
+    "Effects:left_channel": ScaleAnimation(AudioTrackToCurve(max_value=3)),
 }
 
 
@@ -28,7 +29,7 @@ def main() -> None:
 
 
 def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
-    for i, track in enumerate(song.midi_tracks):
+    for i, track in enumerate(song.midi_tracks + song.audio_tracks):
         animation_generator = TRACK_ANIMATION_GENERATORS.get(track.id)
         if animation_generator is None:
             print(f"Animation generator is not found for track {track.id}")
@@ -46,5 +47,4 @@ def add_control_for_tracks(song: Song, controls_collection: Collection) -> None:
             )
             controls_collection.objects.link(control)
 
-        animation_generator.init(track, song)
-        animation_generator.generate(control)
+        animation_generator.generate(control, track)

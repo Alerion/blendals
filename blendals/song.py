@@ -1,3 +1,6 @@
+"""
+This module should be equal to `blendals_parser/song.py` from `blendals_parser` project.
+"""
 from dataclasses import dataclass
 from typing import List
 
