@@ -4,7 +4,7 @@ from blendals.config import settings
 from blendals.frame_calculator import frame_calculator
 
 
-def add_bars_markers(bars_number=10) -> None:
+def add_timeline_markers_for_bars(bars_number=10) -> None:
     clear_bars_markers()
 
     for i in range(bars_number):

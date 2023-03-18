@@ -12,15 +12,18 @@ class AudioTrackToCurve:
 
     def __init__(
         self,
+        audio_track: AudioTrack,
         *,
         min_value: float = 1,
         max_value: float = 2,
     ):
         self.min_value = min_value
         self.max_value = max_value
+        self.track: AudioTrack = audio_track
+        self.name = self.track.id
 
-    def apply_track_to_curve(self, animation_curve: FCurve, audio_track: AudioTrack) -> None:
-        for point in audio_track.points:
+    def apply_track_to_curve(self, animation_curve: FCurve) -> None:
+        for point in self.track.points:
             self._add_point_to_animation_curve(animation_curve, point)
 
     def _add_point_to_animation_curve(self, animation_curve: FCurve, point: Point):
