@@ -11,6 +11,7 @@ from blendals.song import Song, MidiTrack
 from blendals.load_song_from_file import load_song_from_file
 from blendals.blender.animations import ScaleAnimation
 from blendals.blender.curve_generators import MidiTrackToCurve, AudioTrackToCurve
+from blendals.blender.timeline_markers import add_bars_markers
 
 
 TRACK_ANIMATION_GENERATORS = {
@@ -23,6 +24,7 @@ TRACK_ANIMATION_GENERATORS = {
 
 def main() -> None:
     song: Song = load_song_from_file()
+    add_bars_markers()
     controls_collection = create_controls_collection()
     add_control_for_tracks(song, controls_collection)
     add_audio_to_sequence_editor()

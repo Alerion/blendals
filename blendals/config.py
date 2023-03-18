@@ -19,7 +19,7 @@ class Settings:
     # The first bar is 1
     SONG_TEMPO: int = 120
     SONG_BAR_SIZE_BEATS: int = 4
-    SONG_START_BAR: float = 26
+    SONG_START_BAR: float = 1
 
 
 settings = Settings()

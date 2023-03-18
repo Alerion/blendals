@@ -16,8 +16,8 @@ class FrameCalculator:
             logger.warning("start_frame is not integer: %s", self.start_frame)
         self.start_frame = int(self.start_frame)
 
-    def beat_to_frame(self, beat: float) -> float:
-        return self.start_frame + beat * self._frames_per_beat
+    def beat_to_frame(self, beat: float) -> int:
+        return int(self.start_frame + beat * self._frames_per_beat)
 
 
 frame_calculator = FrameCalculator(settings)
