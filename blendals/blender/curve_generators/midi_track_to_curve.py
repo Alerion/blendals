@@ -11,7 +11,7 @@ class MidiTrackToCurve:
         self,
         midi_track: MidiTrack,
         *,
-        min_value: float = 1,
+        min_value: float = 0,
         value_range: float = 1,
         note_attack: float = 0.25,
         note_release: float = 1,

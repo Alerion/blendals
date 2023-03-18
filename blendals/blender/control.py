@@ -27,11 +27,13 @@ class Control:
 
         blender_object.location = self.location
 
-    def animate(self, curve_generator, *, data_path: str, scale_index: int = 0) -> None:
-        name = f"{data_path}[{data_path}]: {curve_generator.name}"
+    def animate_scale(self, curve_generator) -> None:
+        name = f"Scale: {curve_generator.name}"
         print(f"Generate {name} animation")
         self._blender_object.animation_data.action = bpy.data.actions.new(name=name)
-        animation_curve = self._blender_object.animation_data.action.fcurves.new(
-            data_path=data_path, index=scale_index
-        )
-        curve_generator.apply_track_to_curve(animation_curve)
+
+        for scale_index in range(3):
+            animation_curve = self._blender_object.animation_data.action.fcurves.new(
+                data_path="scale", index=scale_index
+            )
+            curve_generator.apply_track_to_curve(animation_curve)
