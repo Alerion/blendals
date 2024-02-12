@@ -6,10 +6,8 @@ authors = ["Dmytro Kostochko <alerion.um@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-rich = "^13.2.0"
+python = "^3.10"
 dacite = "^1.8.0"
-orjson = "^3.8.6"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"
