@@ -10,7 +10,12 @@ bl_info = {
     "category": "3D View",
 }
 
+import sys
+import os.path
 from importlib import reload
+
+DEPENDENCIES_PATH = os.path.join(os.path.dirname(__file__), '../dependencies')
+sys.path.insert(0, DEPENDENCIES_PATH)
 
 if "bpy" not in locals():
     from . import parse_song

@@ -8,6 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.10"
 dacite = "^1.8.0"
+rich = "^13.7.0"
 
 [tool.poetry.dev-dependencies]
 black = "^22.12.0"

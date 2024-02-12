@@ -1,11 +1,17 @@
 import os
 import json
 
+import dacite
+
 import bpy
 import bpy_types
 from bpy.props import StringProperty, BoolProperty
 from bpy.types import Operator, Panel
 from bpy_extras.io_utils import ImportHelper
+
+from rich import print as rprint
+
+from blendals.song import Song
 
 
 class BLENDALS_OT_ParseSong(Operator, ImportHelper):
@@ -26,6 +32,9 @@ class BLENDALS_OT_ParseSong(Operator, ImportHelper):
 
         with open(self.filepath, "r") as song_file:
             data = json.loads(song_file.read())
+            song: Song = dacite.from_dict(data_class=Song, data=data)
+
+        rprint(song)
 
         midi_tracks_count = len(data["midi_tracks"])
         audio_tracks_count = len(data["audio_tracks"])
