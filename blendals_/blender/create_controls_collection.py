@@ -1,8 +1,8 @@
 import bpy
 from bpy_types import Collection, Object
 
-from blendals.config import settings
-from blendals.blender.enums import EmptyDrawType
+from blendals_.config import settings
+from blendals_.blender.enums import EmptyDrawType
 
 
 def create_controls_collection(

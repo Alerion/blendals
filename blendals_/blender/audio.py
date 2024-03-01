@@ -1,7 +1,7 @@
 import bpy
 
-from blendals.config import settings
-from blendals.frame_calculator import frame_calculator
+from blendals_.config import settings
+from blendals_.frame_calculator import frame_calculator
 
 
 def add_audio_to_sequence_editor(channel: int = 1, start_frame: int = frame_calculator.start_frame) -> None:

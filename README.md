@@ -39,7 +39,7 @@ Restart Blender and activate addon. You should see the Blendas panel on the side
 ## Making changes to Addon
 
 Make changes to code and reload scripts inb Blender. To do this click on Blender icon in Menu and `System > Reload Scripts`.
-You can right click on this menu and add it to `Quick Favourits` for quick access with `Q` button.
+You can right-click on this menu and add it to `Quick Favourits` for quick access with `Q` button.
 
 
 # Add python dependency
@@ -77,6 +77,9 @@ It should be something like this `<path to blender>/Blender/4.0/3scripts/modules
 Add `<path to blender>/Blender/4.0/3scripts/modules` as Content Root to your PyCharm project.
 
 
+
+
+
 ## Install dependencies (DEPRECATED)
 
 FIXME: It is a dangerous way, because we can overwrite Blender's dependencies. 
@@ -107,13 +110,13 @@ PROJECT_ROOT = "<Path to project>"
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-import blendals123.blender.main
+import blendals_.blender.main
 
 import importlib
 
 modules_to_reload = []
 for name, module in sys.modules.items():
-    if name.startswith("blendals"):
+    if name.startswith("blendals_"):
         modules_to_reload.append(module)
 
 for module in modules_to_reload:
@@ -123,7 +126,7 @@ for module in modules_to_reload:
     importlib.reload(module)
 
 if __name__ == "__main__":
-    blendals.blender.main.main()
+    blendals_.blender.main.main()
 ```
 
 Now you can change code in IDE and run this script in Blender.

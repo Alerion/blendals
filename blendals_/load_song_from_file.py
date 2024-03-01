@@ -2,8 +2,8 @@ import json
 
 import dacite
 
-from blendals.song import Song, MidiTrack
-from blendals.config import settings
+from blendals_.song import Song, MidiTrack
+from blendals_.config import settings
 
 
 def load_song_from_file() -> Song:

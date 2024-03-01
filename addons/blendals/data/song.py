@@ -7,6 +7,7 @@ from typing import List
 
 @dataclass
 class Song:
+    name: str
     bpm: int
     # Dacite does not work with build in list that is supported from 3.9. So use List instead of list.
     midi_tracks: List["MidiTrack"]

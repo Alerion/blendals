@@ -10,7 +10,6 @@ bl_info = {
     "category": "3D View",
 }
 
-import inspect
 import logging
 import sys
 import os.path
@@ -24,7 +23,11 @@ sys.path.insert(0, DEPENDENCIES_PATH)
 
 # Import modules to register.
 # It should contain `register_module` and `unregister_module` functions.
-import blendals.parse_song
+from .blender_modules import import_song
+
+MODULES = (
+    import_song,
+)
 
 DO_MODULES_RELOAD = ("register" in locals())
 
@@ -44,7 +47,7 @@ def unregister():
 
 
 def _register_addon_modules():
-    for addon_module in _iterate_addon_modules():
+    for addon_module in MODULES:
         if DO_MODULES_RELOAD:
             reload(addon_module)
 
@@ -53,12 +56,6 @@ def _register_addon_modules():
 
 
 def _unregister_addon_modules():
-    for addon_module in _iterate_addon_modules():
+    for addon_module in MODULES:
         if hasattr(addon_module, "unregister_module"):
-            addon_module.register_module()
-
-
-def _iterate_addon_modules():
-    for variable_name, variable in globals().items():
-        if inspect.ismodule(variable) and variable.__package__.startswith("blendals"):
-            yield variable
+            addon_module.unregister_module()

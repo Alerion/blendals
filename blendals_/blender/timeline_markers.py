@@ -1,7 +1,7 @@
 import bpy
 
-from blendals.config import settings
-from blendals.frame_calculator import frame_calculator
+from blendals_.config import settings
+from blendals_.frame_calculator import frame_calculator
 
 
 def add_timeline_markers_for_bars(bars_number=10) -> None:

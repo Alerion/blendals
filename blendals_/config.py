@@ -1,7 +1,7 @@
 import os.path
 from dataclasses import dataclass
 
-from blendals.types import Location
+from blendals_.types import Location
 
 PACKAGE_ROOT = os.path.dirname(__file__)
 PROJECT_ROOT = os.path.join(PACKAGE_ROOT, "..")

@@ -1,8 +1,8 @@
 import bpy
 from bpy_types import Collection, Object
 
-from blendals.types import Location
-from blendals.blender.create_controls_collection import (
+from blendals_.types import Location
+from blendals_.blender.create_controls_collection import (
     create_controls_collection,
     create_control_object,
 )

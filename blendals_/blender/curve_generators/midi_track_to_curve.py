@@ -1,8 +1,8 @@
 from bpy.types import FCurve
 
-from blendals.blender.curve_generators.curve_manipulations import set_keyframe_point
-from blendals.song import MidiTrack, Note
-from blendals.frame_calculator import frame_calculator
+from blendals_.blender.curve_generators.curve_manipulations import set_keyframe_point
+from blendals_.song import MidiTrack, Note
+from blendals_.frame_calculator import frame_calculator
 
 
 class MidiTrackToCurve:

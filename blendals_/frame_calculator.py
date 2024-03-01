@@ -1,6 +1,6 @@
 import logging
 
-from blendals.config import settings, Settings
+from blendals_.config import settings, Settings
 
 logger = logging.Logger(__name__)
 
