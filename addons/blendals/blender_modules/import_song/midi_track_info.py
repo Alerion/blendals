@@ -90,13 +90,7 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
             return {OperatorReturn.CANCELLED}
 
         song_obj = obj.parent
-        frame_calculator = FrameCalculator(
-            song_bpm=song_obj.blendals_song.bpm,
-            song_bar_start=song_obj.blendals_song.bar_start,
-            song_time_signature_numerator=obj.parent.blendals_song.time_signature_numerator,
-            video_fps=context.scene.render.fps,
-            video_frame_start=context.scene.frame_start,
-        )
+        frame_calculator = FrameCalculator.create_from_song(song_obj, context.scene)
         midi_track: MidiTrack = obj.blendals_midi_track.midi_track
         obj.animation_data.action = bpy.data.actions.new(name=f"Scale by MIDI: {midi_track.id}")
 
