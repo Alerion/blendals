@@ -28,8 +28,6 @@ class BLENDALS_OT_ParseSong(bpy.types.Operator, ImportHelper):
     bl_label = "Parse Song"
 
     filter_glob: StringProperty(default='*.json', options={'HIDDEN'})
-    some_boolean: BoolProperty(name='Do a thing', description='Do a thing with the file you\'ve selected',
-                               default=True, )
 
     def execute(self, context: bpy_types.Context) -> set[str]:
         # See https://docs.blender.org/api/current/bpy.types.WindowManager.html#bpy.types.WindowManager.fileselect_add
@@ -38,13 +36,10 @@ class BLENDALS_OT_ParseSong(bpy.types.Operator, ImportHelper):
         print('Selected file:', self.filepath)
         print('File name:', filename)
         print('File extension:', extension)
-        print('Some Boolean:', self.some_boolean)
 
         with open(self.filepath, "r") as song_file:
             song_data = json.loads(song_file.read())
             song: Song = dacite.from_dict(data_class=Song, data=song_data)
-
-        rprint(song)
 
         midi_tracks_count = len(song_data["midi_tracks"])
         audio_tracks_count = len(song_data["audio_tracks"])
@@ -66,11 +61,14 @@ def create_song_object(songs_collection: bpy_types.Collection, song: Song) -> bp
 
     song_object.blendals_song.name = song.name
     song_object.blendals_song.bpm = song.bpm
+    song_object.blendals_song.time_signature_numerator = song.time_signature_numerator
 
     for midi_track in song.midi_tracks:
         midi_track_object = create_midi_track_object(midi_track)
         songs_collection.objects.link(midi_track_object)
         midi_track_object.parent = song_object
+        midi_track_object.animation_data_clear()
+        midi_track_object.animation_data_create()
 
     return song_object
 

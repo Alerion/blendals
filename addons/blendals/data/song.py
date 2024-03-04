@@ -9,6 +9,8 @@ from typing import List
 class Song:
     name: str
     bpm: int
+    time_signature_numerator: int
+    time_signature_denominator: int
     # Dacite does not work with build in list that is supported from 3.9. So use List instead of list.
     midi_tracks: List["MidiTrack"]
     audio_tracks: List["AudioTrack"]
