@@ -6,7 +6,6 @@ import orjson
 
 import bpy
 import bpy_types
-from bpy.props import StringProperty, BoolProperty, IntProperty
 
 from blendals.curve_generators.frame_calculator import FrameCalculator
 from bpy_extras.io_utils import ImportHelper
@@ -27,8 +26,8 @@ class BLENDALS_OT_ParseSong(bpy.types.Operator, ImportHelper):
     bl_idname = "blendals.import_song"
     bl_label = "Parse Song"
 
-    filter_glob: StringProperty(default='*.json', options={'HIDDEN'})
-    add_timeline_markers: BoolProperty(
+    filter_glob: bpy.props.StringProperty(default='*.json', options={'HIDDEN'})
+    add_timeline_markers: bpy.props.BoolProperty(
         name="Add Timeline Markers",
         description="Add timeline markers for song bars. Useful for debugging.",
         default=False

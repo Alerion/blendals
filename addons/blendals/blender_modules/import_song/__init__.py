@@ -19,6 +19,7 @@ if DO_MODULES_RELOAD:
         reload(addon_module)
 
 classes = (
+    song_info.BLENDALS_OT_AddSongAudioTrack,
     song_info.BlendalsSongProperties,
     song_info.BLENDALS_PT_SongInfo,
     midi_track_info.BlendalsMidiTrackProperties,

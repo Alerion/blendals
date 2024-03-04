@@ -82,20 +82,20 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
 
-    def execute(self, context: bpy_types.Context) -> set[str]:
-        obj = context.object
+    def execute(self, context: bpy_types.Context) -> set[OperatorReturn]:
+        midi_track_object = context.object
 
-        if obj.animation_data is None:
+        if midi_track_object.animation_data is None:
             self.report({WMReport.WARNING}, "Object does not have animation data.")
             return {OperatorReturn.CANCELLED}
 
-        song_obj = obj.parent
+        song_obj = midi_track_object.parent
         frame_calculator = FrameCalculator.create_from_song(song_obj, context.scene)
-        midi_track: MidiTrack = obj.blendals_midi_track.midi_track
-        obj.animation_data.action = bpy.data.actions.new(name=f"Scale by MIDI: {midi_track.id}")
+        midi_track: MidiTrack = midi_track_object.blendals_midi_track.midi_track
+        midi_track_object.animation_data.action = bpy.data.actions.new(name=f"Scale by MIDI: {midi_track.id}")
 
         for scale_index in range(3):
-            animation_curve = obj.animation_data.action.fcurves.new(
+            animation_curve = midi_track_object.animation_data.action.fcurves.new(
                 data_path="scale", index=scale_index
             )
             for note in midi_track.notes:
