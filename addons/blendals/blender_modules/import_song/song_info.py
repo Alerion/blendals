@@ -50,6 +50,7 @@ class BlendalsSongProperties(bpy.types.PropertyGroup):
     bar_start: bpy.props.IntProperty(name="Start Bar", default=1, min=1)
     bpm: bpy.props.IntProperty(name="BPM")
     time_signature_numerator: bpy.props.IntProperty(name="Time Signature Numerator")
+    length_in_bars: bpy.props.FloatProperty(name="Length in bars")
 
     @classmethod
     def register(cls):
@@ -97,6 +98,8 @@ class BLENDALS_PT_SongInfo(bpy.types.Panel):
         row.label(text=f"Song: {obj.blendals_song.name}")
         row = layout.row()
         row.prop(obj.blendals_song, "bpm")
+        row.prop(obj.blendals_song, "length_in_bars")
+        row = layout.row()
         row.prop(obj.blendals_song, "time_signature_numerator")
         row = layout.row()
         row.operator(BLENDALS_OT_AddSongAudioTrack.bl_idname)

@@ -98,6 +98,7 @@ def create_song_object(songs_collection: bpy_types.Collection, song: Song, bar_s
     song_object.blendals_song.bpm = song.bpm
     song_object.blendals_song.time_signature_numerator = song.time_signature_numerator
     song_object.blendals_song.bar_start = bar_start
+    song_object.blendals_song.length_in_bars = song.length_in_bars
 
     for midi_track in song.midi_tracks:
         midi_track_object = create_midi_track_object(midi_track)

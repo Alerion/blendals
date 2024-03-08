@@ -18,7 +18,7 @@ class EmptyDrawType(str, Enum):
 
 class KeyframeTransition(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/beztriple_interpolation_mode_items.html#rna-enum-beztriple-interpolation-mode-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/beztriple_interpolation_mode_items.html
     """
 
     CONSTANT = "CONSTANT"
@@ -28,7 +28,7 @@ class KeyframeTransition(str, Enum):
 
 class KeyframeHandleType(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/keyframe_handle_type_items.html#rna-enum-keyframe-handle-type-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/keyframe_handle_type_items.html
     """
 
     FREE = "FREE"
@@ -40,7 +40,7 @@ class KeyframeHandleType(str, Enum):
 
 class PropertySubtypeNumber(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/property_subtype_number_items.html#rna-enum-property-subtype-number-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/property_subtype_number_items.html
     """
 
     PIXEL = "PIXEL"
@@ -59,7 +59,7 @@ class PropertySubtypeNumber(str, Enum):
 
 class WMReport(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/wm_report_items.html#rna-enum-wm-report-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/wm_report_items.html
     """
 
     DEBUG = "DEBUG"
@@ -75,7 +75,7 @@ class WMReport(str, Enum):
 
 class OperatorReturn(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/operator_return_items.html#rna-enum-operator-return-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/operator_return_items.html
     """
 
     RUNNING_MODAL = "RUNNING_MODAL"
@@ -87,7 +87,7 @@ class OperatorReturn(str, Enum):
 
 class OperatorTypeFlag(str, Enum):
     """
-    https://docs.blender.org/api/current/bpy_types_enum_items/operator_type_flag_items.html#rna-enum-operator-type-flag-items
+    https://docs.blender.org/api/current/bpy_types_enum_items/operator_type_flag_items.html
     """
 
     REGISTER = "REGISTER"
@@ -101,3 +101,17 @@ class OperatorTypeFlag(str, Enum):
     DEPENDS_ON_CURSOR = "DEPENDS_ON_CURSOR"
     PRESET = "PRESET"
     INTERNAL = "INTERNAL"
+
+
+class FModifierType(str, Enum):
+    """
+    https://docs.blender.org/api/current/bpy_types_enum_items/fmodifier_type_items.html
+    """
+    NULL = "NULL"
+    GENERATOR = "GENERATOR"
+    FNGENERATOR = "FNGENERATOR"
+    ENVELOPE = "ENVELOPE"
+    CYCLES = "CYCLES"
+    NOISE = "NOISE"
+    LIMITS = "LIMITS"
+    STEPPED = "STEPPED"

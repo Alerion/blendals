@@ -5,7 +5,7 @@ import bpy
 import bpy_types
 
 from blendals.data.song import MidiTrack, Note
-from blendals.blnder_utils.enums import PropertySubtypeNumber, WMReport, OperatorReturn, OperatorTypeFlag
+from blendals.blnder_utils.enums import PropertySubtypeNumber, WMReport, OperatorReturn, OperatorTypeFlag, FModifierType
 from blendals.curve_generators.frame_calculator import FrameCalculator
 from blendals.curve_generators.curve_manipulations import set_keyframe_point
 
@@ -74,6 +74,11 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
         soft_max=1,
         subtype=PropertySubtypeNumber.FACTOR,
     )
+    loop: bpy.props.BoolProperty(
+        name="Loop",
+        description="Add Cycles F-Modifier to generated F-Curve.",
+        default=True,
+    )
 
     @classmethod
     def poll(cls, context):
@@ -98,8 +103,14 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
             animation_curve = midi_track_object.animation_data.action.fcurves.new(
                 data_path="scale", index=scale_index
             )
+
+            self._add_boundaries_keyframes(frame_calculator, animation_curve, song_obj)
+
             for note in midi_track.notes:
                 self._add_note_to_animation_curve(frame_calculator, animation_curve, note)
+
+            if self.loop:
+                animation_curve.modifiers.new(type=FModifierType.CYCLES)
 
         return {OperatorReturn.FINISHED}
 
@@ -114,6 +125,15 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
         set_keyframe_point(animation_curve, frame=peak_frame, value=self.min_scale + self.max_scale)
         set_keyframe_point(animation_curve, frame=end_frame, value=self.min_scale)
 
+    def _add_boundaries_keyframes(self, frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve,
+                                  song_obj: bpy_types.Object) -> None:
+        # Add first frame.
+        set_keyframe_point(animation_curve, frame=frame_calculator.start_frame, value=self.min_scale)
+        # Add last frame.
+        final_beat = song_obj.blendals_song.length_in_bars * song_obj.blendals_song.time_signature_numerator
+        frame = frame_calculator.beat_to_frame(final_beat)
+        set_keyframe_point(animation_curve, frame=frame, value=self.min_scale)
+
 
 class BLENDALS_PT_MidiTrackInfo(bpy.types.Panel):
     """Creates a Panel in the Object properties window"""
@@ -124,10 +144,10 @@ class BLENDALS_PT_MidiTrackInfo(bpy.types.Panel):
     bl_context = "object"
 
     @classmethod
-    def poll(cls, context) -> bool:
+    def poll(cls, context: bpy_types.Context) -> bool:
         return is_midi_track_object(context.object)
 
-    def draw(self, context):
+    def draw(self, context: bpy_types.Context):
         layout = self.layout
 
         obj = context.object
