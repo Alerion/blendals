@@ -10,8 +10,9 @@ from Ableton Live project file.
 
 # Installation
 
+Use python version that is used by targeted Blender version. You can find it in Blender's Scripting window.
 ```
-python3.10 -m venv venv
+python3.11 -m venv venv
 . venv/Scripts/activate
 poetry install
 ```
@@ -38,7 +39,7 @@ Restart Blender and activate addon. You should see the Blendas panel on the side
 
 ## Making changes to Addon
 
-Make changes to code and reload scripts inb Blender. To do this click on Blender icon in Menu and `System > Reload Scripts`.
+Make changes to code and reload scripts in Blender. To do this click on Blender icon in Menu and `System > Reload Scripts`.
 You can right-click on this menu and add it to `Quick Favourits` for quick access with `Q` button.
 
 
@@ -77,4 +78,25 @@ It should be something like this `<path to blender>/Blender/4.0/3scripts/modules
 Add `<path to blender>/Blender/4.0/3scripts/modules` as Content Root to your PyCharm project.
 
 
+# Workflow
 
+1. Use [blendals_parser](https://github.com/Alerion/blendals_parser) to get `song.json` file
+from Ableton Live project file. You can find prepared files in ``song_example`` folder.
+
+2. Use Blendals side panel to parse song.json.
+
+![parse_song_panel.png](./images/parse_song_panel.png)
+
+3. Empty objects for a song and each MIDI track were created. Track information is saved in an empty object to generate animation later.
+
+![songs_collection.png](./images/songs_collection.png)
+
+4. You can view/edit song's properties on Object Properties tab. These properties are used to generate animation.
+
+![song_properties.png](./images/song_properties.png)
+
+5. Select track and click "Apply Scale Animation". You can see animation applied to ``Scale`` properties.
+
+![midi_track_properties.png](./images/midi_track_properties.png)
+
+6. Right click on ``Scale X``, ``Copy as New Driver``. Now select Cube, right click on Cube's ``Scale X`` property and ``Paste Driver``.

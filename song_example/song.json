@@ -1,0 +1,115 @@
+{
+  "name": "Debug parsing for blender (10.02.2024)",
+  "bpm": 120,
+  "time_signature_numerator": 4,
+  "time_signature_denominator": 4,
+  "length_in_bars": 4,
+  "midi_tracks": [
+    {
+      "id": "Drums:Kick Analog 12",
+      "notes": [
+        {
+          "start": 0.0,
+          "end": 0.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 2.0,
+          "end": 2.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 4.0,
+          "end": 4.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 6.0,
+          "end": 6.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 8.0,
+          "end": 8.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 10.0,
+          "end": 10.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 12.0,
+          "end": 12.5,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 13.5,
+          "end": 14.0,
+          "velocity": 100,
+          "midi_key": 36
+        },
+        {
+          "start": 14.0,
+          "end": 14.5,
+          "velocity": 100,
+          "midi_key": 36
+        }
+      ]
+    },
+    {
+      "id": "Drums:Hats Noise Ring",
+      "notes": [
+        {
+          "start": 2.5215339348151846,
+          "end": 3.0215339348151846,
+          "velocity": 100,
+          "midi_key": 37
+        },
+        {
+          "start": 6.5,
+          "end": 7.0,
+          "velocity": 100,
+          "midi_key": 37
+        },
+        {
+          "start": 10.5,
+          "end": 11.0,
+          "velocity": 100,
+          "midi_key": 37
+        }
+      ]
+    },
+    {
+      "id": "Drums:Bass Rise",
+      "notes": [
+        {
+          "start": 5.0,
+          "end": 6.0,
+          "velocity": 100,
+          "midi_key": 38
+        },
+        {
+          "start": 9.0,
+          "end": 10.0,
+          "velocity": 100,
+          "midi_key": 38
+        },
+        {
+          "start": 14.5,
+          "end": 15.5,
+          "velocity": 100,
+          "midi_key": 38
+        }
+      ]
+    }
+  ],
+  "audio_tracks": []
+}
