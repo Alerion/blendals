@@ -1,5 +1,6 @@
-import dacite
 import json
+
+import dacite
 
 import bpy
 import bpy_types

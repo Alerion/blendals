@@ -1,8 +1,8 @@
 import os
 import json
+from dataclasses import asdict
 
 import dacite
-import json
 
 import bpy
 import bpy_types
@@ -117,7 +117,7 @@ def create_midi_track_object(midi_track: MidiTrack) -> bpy_types.Object:
 
     midi_track_object.blendals_midi_track.track_id = midi_track.id
     midi_track_object.blendals_midi_track.notes_number = len(midi_track.notes)
-    midi_track_object.blendals_midi_track.raw_data = json.dumps(midi_track).decode()
+    midi_track_object.blendals_midi_track.raw_data = json.dumps(asdict(midi_track))
 
     return midi_track_object
 

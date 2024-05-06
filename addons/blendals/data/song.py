@@ -2,7 +2,6 @@
 This module should be equal to `blendals_parser/song.py` from `blendals_parser` project.
 """
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
@@ -13,8 +12,8 @@ class Song:
     time_signature_denominator: int
     length_in_bars: float
     # Dacite does not work with build in list that is supported from 3.9. So use List instead of list.
-    midi_tracks: List["MidiTrack"]
-    audio_tracks: List["AudioTrack"]
+    midi_tracks: list["MidiTrack"]
+    audio_tracks: list["AudioTrack"]
 
     def get_midi_track(self, track_id: str) -> "MidiTrack":
         for track in self.midi_tracks:
@@ -26,7 +25,7 @@ class Song:
 @dataclass
 class MidiTrack:
     id: str
-    notes: List["Note"]
+    notes: list["Note"]
 
 
 @dataclass
@@ -39,7 +38,7 @@ class Note:
 @dataclass
 class AudioTrack:
     id: str
-    points: List["Point"]
+    points: list["Point"]
 
 
 @dataclass
