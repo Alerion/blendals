@@ -1,5 +1,5 @@
 import dacite
-import orjson
+import json
 
 import bpy
 import bpy_types
@@ -23,7 +23,7 @@ class BlendalsMidiTrackProperties(bpy.types.PropertyGroup):
 
     @property
     def midi_track(self) -> MidiTrack:
-        midi_track_data = orjson.loads(self.raw_data)
+        midi_track_data = json.loads(self.raw_data)
         return dacite.from_dict(data_class=MidiTrack, data=midi_track_data)
 
     @classmethod
