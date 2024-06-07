@@ -45,22 +45,29 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
     bl_label = "Apply Scale Animation"
     bl_options = {OperatorTypeFlag.REGISTER}
 
-    min_scale: bpy.props.FloatProperty(
-        name="Min Scale",
-        default=0,
-        soft_min=0,
-        soft_max=10,
-    )
     max_scale: bpy.props.FloatProperty(
         name="Max Scale",
         default=1,
         soft_min=0,
         soft_max=10,
     )
+    sustain_scale: bpy.props.FloatProperty(
+        name="Sustain Scale",
+        default=0.75,
+        soft_min=0,
+        soft_max=10,
+    )
     attack: bpy.props.FloatProperty(
         name="Attack",
-        description="Attack is the time taken for the rise of the level from nil to peak. "
-                    "Value is a fraction of a note length.",
+        description="Value is a fraction of a note length",
+        default=0.25,
+        min=0,
+        soft_max=1,
+        subtype=PropertySubtypeNumber.FACTOR,
+    )
+    decay: bpy.props.FloatProperty(
+        name="Decay",
+        description="Value is a fraction of a note length",
         default=0.25,
         min=0,
         soft_max=1,
@@ -68,16 +75,15 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
     )
     release: bpy.props.FloatProperty(
         name="Release",
-        description="Release is the time taken for the level to decay to nil. "
-                    "Value is a fraction of a note length.",
-        default=1,
+        description="Value is a fraction of a note length",
+        default=0.5,
         min=0,
         soft_max=1,
         subtype=PropertySubtypeNumber.FACTOR,
     )
     loop: bpy.props.BoolProperty(
         name="Loop",
-        description="Add Cycles F-Modifier to generated F-Curve.",
+        description="Add Cycles F-Modifier to generated F-Curve",
         default=True,
     )
 
@@ -116,24 +122,33 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
         return {OperatorReturn.FINISHED}
 
     def _add_note_to_animation_curve(self, frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve, note: Note) -> None:
-        start_frame = frame_calculator.beat_to_frame(note.start)
-        end_frame = frame_calculator.beat_to_frame(note.end)
+        note_start_frame = frame_calculator.beat_to_frame(note.start)
+        note_end_frame = frame_calculator.beat_to_frame(note.end)
 
-        peak_frame = start_frame + (end_frame - start_frame) * self.attack
-        end_frame = start_frame + (end_frame - start_frame) * self.release
+        _note_length_in_frames = note_end_frame - note_start_frame
+        peak_frame = note_start_frame + _note_length_in_frames * max(self.attack, 0.001)
+        sustain_start_frame = note_start_frame + _note_length_in_frames * (self.attack + self.decay)
+        release_end_frame = note_end_frame + _note_length_in_frames * max(self.release, 0.001)
 
-        set_keyframe_point(animation_curve, frame=start_frame, value=self.min_scale)
-        set_keyframe_point(animation_curve, frame=peak_frame, value=self.min_scale + self.max_scale)
-        set_keyframe_point(animation_curve, frame=end_frame, value=self.min_scale)
+        print(note_start_frame, peak_frame, sustain_start_frame, note_end_frame, release_end_frame)
+
+        set_keyframe_point(animation_curve, frame=note_start_frame, value=0)
+        set_keyframe_point(animation_curve, frame=peak_frame, value=self.max_scale)
+
+        if sustain_start_frame != peak_frame:
+            set_keyframe_point(animation_curve, frame=sustain_start_frame, value=self.sustain_scale)
+
+        set_keyframe_point(animation_curve, frame=note_end_frame, value=self.sustain_scale)
+        set_keyframe_point(animation_curve, frame=release_end_frame, value=0)
 
     def _add_boundaries_keyframes(self, frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve,
                                   song_obj: bpy_types.Object) -> None:
         # Add first frame.
-        set_keyframe_point(animation_curve, frame=frame_calculator.start_frame, value=self.min_scale)
+        set_keyframe_point(animation_curve, frame=frame_calculator.start_frame, value=0)
         # Add last frame.
         final_beat = song_obj.blendals_song.length_in_bars * song_obj.blendals_song.time_signature_numerator
         frame = frame_calculator.beat_to_frame(final_beat)
-        set_keyframe_point(animation_curve, frame=frame, value=self.min_scale)
+        set_keyframe_point(animation_curve, frame=frame, value=0)
 
 
 class BLENDALS_PT_MidiTrackInfo(bpy.types.Panel):
