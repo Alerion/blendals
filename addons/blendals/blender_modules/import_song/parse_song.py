@@ -29,8 +29,8 @@ class BLENDALS_OT_ParseSong(bpy.types.Operator, ImportHelper):
     filter_glob: bpy.props.StringProperty(default='*.json', options={'HIDDEN'})
     add_timeline_markers: bpy.props.BoolProperty(
         name="Add Timeline Markers",
-        description="Add timeline markers for song bars. Useful for debugging.",
-        default=False
+        description="Add timeline markers for Ableton project locators",
+        default=True
     )
     bar_start: bpy.props.IntProperty(
         name="Start Bar",
@@ -60,28 +60,23 @@ class BLENDALS_OT_ParseSong(bpy.types.Operator, ImportHelper):
         song_obj = create_song_object(songs_collection, song, self.bar_start)
 
         if self.add_timeline_markers:
-            clear_song_bars_timeline_markers(context)
+            clear_locators_timeline_markers(context)
             frame_calculator = FrameCalculator.create_from_song(song_obj, context.scene)
-            add_song_bars_timeline_markers(frame_calculator)
+            add_locators_timeline_markers(frame_calculator, song)
 
         return {'FINISHED'}
 
 
-def add_song_bars_timeline_markers(frame_calculator: FrameCalculator, bars_number: int = 10) -> None:
-    for i in range(bars_number):
-        current_bar = frame_calculator.song_bar_start + i - 1
-        if current_bar <= 1:
-            current_bar = 1
-
-        beat = (current_bar - 1) * frame_calculator.song_time_signature_numerator
-        frame = frame_calculator.beat_to_frame(beat)
-        bpy.context.scene.timeline_markers.new(name=f"bar:{current_bar}", frame=frame)
+def add_locators_timeline_markers(frame_calculator: FrameCalculator, song: Song) -> None:
+    for locator in song.locators:
+        frame = frame_calculator.beat_to_frame(locator.time)
+        bpy.context.scene.timeline_markers.new(name=f"loc:{locator.name}", frame=frame)
 
 
-def clear_song_bars_timeline_markers(context: bpy_types.Context):
+def clear_locators_timeline_markers(context: bpy_types.Context):
     timeline_markers_to_remove = []
     for timeline_marker in context.scene.timeline_markers.values():
-        if timeline_marker.name.startswith("bar:"):
+        if timeline_marker.name.startswith("loc:"):
             timeline_markers_to_remove.append(timeline_marker)
 
     for timeline_marker in timeline_markers_to_remove:

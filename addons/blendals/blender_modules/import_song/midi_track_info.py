@@ -84,7 +84,7 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
     loop: bpy.props.BoolProperty(
         name="Loop",
         description="Add Cycles F-Modifier to generated F-Curve",
-        default=True,
+        default=False,
     )
 
     @classmethod
@@ -129,8 +129,6 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
         peak_frame = note_start_frame + _note_length_in_frames * max(self.attack, 0.001)
         sustain_start_frame = note_start_frame + _note_length_in_frames * (self.attack + self.decay)
         release_end_frame = note_end_frame + _note_length_in_frames * max(self.release, 0.001)
-
-        print(note_start_frame, peak_frame, sustain_start_frame, note_end_frame, release_end_frame)
 
         set_keyframe_point(animation_curve, frame=note_start_frame, value=0)
         set_keyframe_point(animation_curve, frame=peak_frame, value=self.max_scale)
