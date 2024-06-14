@@ -13,7 +13,8 @@ from blendals.curve_generators.curve_manipulations import set_keyframe_point
 __all__ = (
     "BlendalsMidiTrackProperties",
     "BLENDALS_PT_MidiTrackInfo",
-    "BLENDALS_OT_ApplyAnimation"
+    "BLENDALS_OT_ApplyADSRAnimation",
+    "BLENDALS_OT_ApplySawtoothAnimation",
 )
 
 
@@ -40,9 +41,63 @@ class BlendalsMidiTrackProperties(bpy.types.PropertyGroup):
         del bpy.types.Object.blendals_midi_track
 
 
-class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
-    bl_idname = "blendals.apply_animation"
-    bl_label = "Apply Scale Animation"
+class BLENDALS_OT_ApplySawtoothAnimation(bpy.types.Operator):
+    bl_idname = "blendals.apply_sawtooth_animation"
+    bl_label = "Apply Sawtooth Animation"
+    bl_options = {OperatorTypeFlag.REGISTER}
+
+    loop: bpy.props.BoolProperty(
+        name="Loop",
+        description="Add Cycles F-Modifier to generated F-Curve",
+        default=False,
+    )
+
+    @classmethod
+    def poll(cls, context):
+        return is_midi_track_object(context.object)
+
+    def invoke(self, context, event):
+        return context.window_manager.invoke_props_dialog(self)
+
+    def execute(self, context: bpy_types.Context) -> set[OperatorReturn]:
+        midi_track_object = context.object
+
+        if midi_track_object.animation_data is None:
+            self.report({WMReport.WARNING}, "Object does not have animation data.")
+            return {OperatorReturn.CANCELLED}
+
+        song_obj = midi_track_object.parent
+        frame_calculator = FrameCalculator.create_from_song(song_obj, context.scene)
+        midi_track: MidiTrack = midi_track_object.blendals_midi_track.midi_track
+        midi_track_object.animation_data.action = bpy.data.actions.new(name=f"Scale by MIDI: {midi_track.id}")
+
+        for scale_index in range(3):
+            animation_curve = midi_track_object.animation_data.action.fcurves.new(
+                data_path="scale", index=scale_index
+            )
+
+            _add_boundaries_keyframes(frame_calculator, animation_curve, song_obj)
+
+            for note in midi_track.notes:
+                self._add_note_to_animation_curve(frame_calculator, animation_curve, note)
+
+            if self.loop:
+                animation_curve.modifiers.new(type=FModifierType.CYCLES)
+
+        return {OperatorReturn.FINISHED}
+
+    def _add_note_to_animation_curve(self, frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve, note: Note) -> None:
+        note_start_frame = frame_calculator.beat_to_frame(note.start)
+        note_end_frame = frame_calculator.beat_to_frame(note.end)
+
+        set_keyframe_point(animation_curve, frame=note_start_frame-1, value=0)
+        set_keyframe_point(animation_curve, frame=note_start_frame, value=1)
+        set_keyframe_point(animation_curve, frame=note_end_frame, value=0)
+
+
+class BLENDALS_OT_ApplyADSRAnimation(bpy.types.Operator):
+    bl_idname = "blendals.apply_adsr_animation"
+    bl_label = "Apply ADSR Animation"
     bl_options = {OperatorTypeFlag.REGISTER}
 
     max_scale: bpy.props.FloatProperty(
@@ -111,7 +166,7 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
                 data_path="scale", index=scale_index
             )
 
-            self._add_boundaries_keyframes(frame_calculator, animation_curve, song_obj)
+            _add_boundaries_keyframes(frame_calculator, animation_curve, song_obj)
 
             for note in midi_track.notes:
                 self._add_note_to_animation_curve(frame_calculator, animation_curve, note)
@@ -139,14 +194,15 @@ class BLENDALS_OT_ApplyAnimation(bpy.types.Operator):
         set_keyframe_point(animation_curve, frame=note_end_frame, value=self.sustain_scale)
         set_keyframe_point(animation_curve, frame=release_end_frame, value=0)
 
-    def _add_boundaries_keyframes(self, frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve,
-                                  song_obj: bpy_types.Object) -> None:
-        # Add first frame.
-        set_keyframe_point(animation_curve, frame=frame_calculator.start_frame, value=0)
-        # Add last frame.
-        final_beat = song_obj.blendals_song.length_in_bars * song_obj.blendals_song.time_signature_numerator
-        frame = frame_calculator.beat_to_frame(final_beat)
-        set_keyframe_point(animation_curve, frame=frame, value=0)
+
+def _add_boundaries_keyframes(frame_calculator: FrameCalculator, animation_curve: bpy.types.FCurve,
+                              song_obj: bpy_types.Object) -> None:
+    # Add first frame.
+    set_keyframe_point(animation_curve, frame=frame_calculator.start_frame, value=0)
+    # Add last frame.
+    final_beat = song_obj.blendals_song.length_in_bars * song_obj.blendals_song.time_signature_numerator
+    frame = frame_calculator.beat_to_frame(final_beat)
+    set_keyframe_point(animation_curve, frame=frame, value=0)
 
 
 class BLENDALS_PT_MidiTrackInfo(bpy.types.Panel):
@@ -171,7 +227,8 @@ class BLENDALS_PT_MidiTrackInfo(bpy.types.Panel):
         row = layout.row()
         row.label(text=f"Notes number: {obj.blendals_midi_track.notes_number}")
         row = layout.row()
-        row.operator(BLENDALS_OT_ApplyAnimation.bl_idname)
+        row.operator(BLENDALS_OT_ApplyADSRAnimation.bl_idname)
+        row.operator(BLENDALS_OT_ApplySawtoothAnimation.bl_idname)
 
 
 def is_midi_track_object(obj: bpy_types.Object | None) -> bool:

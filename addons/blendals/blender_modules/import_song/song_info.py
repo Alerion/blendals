@@ -1,7 +1,7 @@
 import bpy
 import bpy_types
 
-from blendals.blnder_utils.enums import PropertySubtypeNumber, WMReport, OperatorReturn, OperatorTypeFlag
+from blendals.blnder_utils.enums import  WMReport, OperatorReturn, OperatorTypeFlag
 from bpy_extras.io_utils import ImportHelper
 
 __all__ = (

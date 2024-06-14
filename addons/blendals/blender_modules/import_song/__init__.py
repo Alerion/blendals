@@ -24,7 +24,8 @@ classes = (
     song_info.BLENDALS_PT_SongInfo,
     midi_track_info.BlendalsMidiTrackProperties,
     midi_track_info.BLENDALS_PT_MidiTrackInfo,
-    midi_track_info.BLENDALS_OT_ApplyAnimation,
+    midi_track_info.BLENDALS_OT_ApplyADSRAnimation,
+    midi_track_info.BLENDALS_OT_ApplySawtoothAnimation,
     parse_song.BLENDALS_OT_ParseSong,
     parse_song.BLENDALS_PT_ParseSong,
 )
